@@ -1,0 +1,292 @@
+// Variables et mixins importés
+@import "variables";
+@import "mixins";
+
+// Reset global
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: $font-base;
+  background-color: $bg;
+  overflow-x: hidden;
+}
+
+// CONTAINER GLOBAL
+.frame-container {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  background: url("../assets/images/fond.png") no-repeat left bottom;
+  background-size: 100% auto;
+  overflow: hidden;
+  max-width: 1000px;
+  margin: auto;
+}
+
+// BANDEAU À GAUCHE
+.stripe {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 20%;
+  height: 100%;
+  background-color: #a47d57; // Bandeau brun-doré
+  z-index: 1;
+}
+
+// LOGO EN HAUT À GAUCHE
+.logo {
+  position: absolute;
+  top: $gap;
+  left: $gap;
+  width: 9rem;
+  z-index: 3;
+  filter: brightness(1.6) saturate(40%) sepia(50%) hue-rotate(15deg) contrast(85%);
+}
+
+// BOUTON MENU (CANNE)
+.menu-btn {
+  position: absolute;
+  top: $gap;
+  right: $gap;
+  background: none;
+  border: none;
+  cursor: pointer;
+  z-index: 10;
+
+  img {
+    width: 4rem;
+  }
+}
+
+// CADRE DORÉ (zone d’affichage)
+.cadre {
+  position: absolute;
+  top: 1.25rem;
+  left: 20%;
+  width: calc(80% - 2.5rem + 2.5rem);
+  height: calc(100% - 1.25rem);
+  object-fit: contain;
+  z-index: 2;
+  pointer-events: none;
+}
+
+// TITRE DYNAMIQUE CENTRÉ
+.page-label {
+  position: absolute;
+  top: 1rem;
+  left: 20%;
+  right: 2.5rem;
+  text-align: center;
+  font-family: 'Abibas', sans-serif;
+  color: $brand-brown;
+  font-size: 1.5rem;
+  z-index: 4;
+}
+
+// VERSET CENTRÉ
+.verse {
+  position: absolute;
+  top: 55%; // un peu plus bas que 50% pour laisser place au flash-message
+  left: 20%;
+  right: 2.5rem;
+  transform: translateY(-50%);
+  text-align: center;
+  font-family: 'Barlow', sans-serif;
+  color: $brand-brown;
+  z-index: 4;
+  padding: 0 1rem;
+  word-wrap: break-word;
+  max-width: calc(80% - 3rem);
+}
+
+// ICÔNES SOUS LE CADRE
+.icons {
+  position: absolute;
+  bottom: 2rem;
+  left: 20%;
+  width: calc(80% - 2.5rem);
+  display: flex;
+  justify-content: center;
+  gap: $gap;
+  z-index: 4;
+
+  i, button {
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: $brand-brown;
+    background: none;
+    border: none;
+    padding: 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    &:hover {
+      color: darken($brand-brown, 15%);
+    }
+  }
+}
+
+// MENU DEROULANT
+.dropdown {
+  display: none;
+  position: absolute;
+  top: calc(#{$gap} + 4.5rem);
+  right: 2.5rem;
+  background: #fff;
+  border-radius: 4px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+  z-index: 11;
+
+  &.open {
+    display: block;
+  }
+
+  ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+
+    li a {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.5rem 1rem;
+      color: $brand-brown;
+      text-decoration: none;
+      white-space: nowrap;
+
+      &:hover {
+        background: #f4e9d5;
+      }
+    }
+  }
+}
+
+// FORMULAIRES CENTRÉS DANS LE CADRE (rehaussés)
+.form-section {
+  position: absolute;
+  top: calc(50% - 2.5rem); // remonter de 2.5rem (~40px)
+  left: 20%;
+  right: 2.5rem;
+  transform: translateY(-50%);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 5;
+  max-width: calc(80% - 3rem);
+}
+
+.form-auth {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  width: 100%;
+  max-width: 320px;
+  background: transparent;
+  pointer-events: auto;
+
+  input {
+    padding: 0.5rem;
+    width: 100%;
+    font-family: inherit;
+    border: 1px solid $brand-brown;
+    border-radius: 4px;
+
+    &::placeholder {
+      color: lighten($brand-brown, 20%);
+      font-style: italic;
+    }
+
+    &:focus {
+      border-color: darken($brand-brown, 10%);
+      box-shadow: 0 0 5px rgba(125, 90, 60, 0.4);
+      outline: none;
+    }
+  }
+
+  button {
+    padding: 0.5rem 1rem;
+    background-color: $brand-brown;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: bold;
+    font-family: inherit;
+    transition: background-color 0.3s ease;
+
+    &:hover {
+      background-color: darken($brand-brown, 10%);
+    }
+  }
+}
+
+// MESSAGE FLASH AU-DESSUS DU VERSET (PAS DE BACKGROUND BEIGE)
+.flash-message {
+  position: absolute;
+  top: 3rem; // place au dessus du verset, en dessous du titre
+  left: 20%;
+  right: 2.5rem;
+  color: $brand-brown;
+  padding: 0.5rem 1.5rem;
+  border: 1px solid $brand-brown;
+  border-radius: 5px;
+  font-weight: 700;
+  box-shadow: 0 0 10px rgba(125, 90, 60, 0.25);
+  z-index: 20;
+  max-width: calc(80% - 3rem);
+  text-align: center;
+  pointer-events: none;
+  user-select: none;
+  background: transparent;
+}
+
+// RESPONSIVE MOBILE FIRST
+@media (max-width: 767px) {
+  .frame-container {
+    max-width: 100vw;
+    padding: 1rem 1.5rem;
+  }
+
+  .page-label {
+    font-size: 1.25rem;
+    left: 0;
+    right: 0;
+  }
+
+  .verse {
+    left: 0;
+    right: 0;
+    padding: 0 0.5rem;
+    font-size: 1rem;
+    max-width: 100%;
+  }
+
+  .icons {
+    left: 0;
+    width: 100%;
+  }
+
+  .form-section {
+    left: 0;
+    right: 0;
+    max-width: 100%;
+    padding: 0 1rem;
+    top: calc(50% - 2.5rem);
+  }
+
+  .dropdown {
+    right: 1rem;
+    top: calc(#{$gap} + 4rem);
+  }
+
+  .menu-btn img {
+    width: 3rem;
+  }
+}

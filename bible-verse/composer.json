@@ -1,0 +1,13 @@
+{
+  "name": "alexandremoraisdesousa/bible-verse",
+  "autoload": {
+    "psr-4": {
+      "Core\\": "core/",
+      "App\\Controllers\\": "app/Controllers/",
+      "App\\Models\\": "app/Models/"
+    }
+  },
+  "require": {
+    "ext-pdo": "*"
+  }
+}
