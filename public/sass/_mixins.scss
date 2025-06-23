@@ -1,0 +1,9 @@
+@mixin rose-filter {
+  filter: $rose-filter;
+}
+
+@mixin center-flex {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

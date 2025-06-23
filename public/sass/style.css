@@ -1,0 +1,242 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: "Barlow", sans-serif;
+  background-color: #fff8f2;
+}
+
+.frame-container {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  background: url("../assets/images/fond.png") no-repeat left bottom;
+  background-size: 100% auto;
+  overflow: hidden;
+}
+
+.stripe {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 20%;
+  height: 100%;
+  background-color: #a47d57;
+  z-index: 1;
+}
+
+.logo {
+  position: absolute;
+  top: 1rem;
+  left: 1rem;
+  width: 30vw;
+  max-width: 6.5rem;
+  filter: brightness(1.6) saturate(40%) sepia(50%) hue-rotate(15deg) contrast(85%);
+  z-index: 3;
+  text-align: left;
+}
+
+.menu-btn {
+  position: absolute;
+  top: 1rem;
+  right: 2.5rem;
+  background: none;
+  border: none;
+  cursor: pointer;
+  z-index: 4;
+}
+.menu-btn img {
+  width: 4rem;
+}
+
+.cadre {
+  position: absolute;
+  top: 1.25rem;
+  left: calc(20% - 0.625rem);
+  width: calc(80% - 40px + 2.5rem);
+  height: calc(100% - 1rem);
+  -o-object-fit: contain;
+     object-fit: contain;
+  z-index: 2;
+}
+
+.page-label {
+  position: absolute;
+  top: 1rem;
+  left: 20%;
+  right: 2.5rem;
+  text-align: center;
+  font-family: "Barlow", sans-serif;
+  color: #a47d57;
+  font-size: 1.5rem;
+  z-index: 4;
+}
+
+.verse {
+  position: absolute;
+  top: 50%;
+  left: calc(20% - 1.25rem);
+  right: 2.5rem;
+  transform: translateY(-50%);
+  text-align: center;
+  font-family: "Barlow", sans-serif;
+  color: #a47d57;
+  font-size: 1.25rem;
+  font-weight: 300;
+  z-index: 4;
+}
+.verse .verse-text {
+  display: inline-block;
+  text-align: left;
+  padding-left: 1.25rem;
+}
+
+.favoris-zone {
+  position: absolute;
+  top: 50%;
+  left: calc(20% - 1.25rem);
+  right: 2.5rem;
+  transform: translateY(-50%);
+  text-align: center;
+  font-family: "Barlow", sans-serif;
+  color: #a47d57;
+  font-size: 1.25rem;
+  font-weight: 300;
+  z-index: 4;
+}
+.favoris-zone p {
+  margin-bottom: 0.5rem;
+}
+
+.form-section {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  z-index: 5;
+}
+
+.form-auth {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+  background: transparent;
+}
+.form-auth input {
+  padding: 0.4rem;
+  width: 100%;
+  max-width: 300px;
+  font-family: inherit;
+  border: 1px solid #a47d57;
+  border-radius: 4px;
+  z-index: 6;
+}
+.form-auth button {
+  padding: 0.5rem 1rem;
+  background-color: #a47d57;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: bold;
+  font-family: inherit;
+  z-index: 6;
+}
+
+.form-errors {
+  color: red;
+  margin-bottom: 1rem;
+  list-style: none;
+  text-align: center;
+}
+
+.icons {
+  position: absolute;
+  bottom: 2rem;
+  left: calc(20% + 1.25rem);
+  width: calc(80% - 40px);
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  z-index: 4;
+}
+.icons a,
+.icons button {
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+}
+.icons a i,
+.icons button i {
+  font-size: 1.5rem;
+  color: #a47d57 !important;
+}
+.icons a:hover,
+.icons button:hover {
+  opacity: 0.8;
+}
+
+.flash-message {
+  position: absolute;
+  bottom: 5.5rem;
+  left: calc(20% + 1.25rem);
+  right: 2.5rem;
+  background: transparent;
+  color: #a47d57;
+  text-align: center;
+  font-size: 1rem;
+  padding: 0;
+  z-index: 5;
+}
+
+.dropdown {
+  display: none;
+  position: absolute;
+  top: 3.5rem;
+  right: 2.5rem;
+  background: #fff;
+  border-radius: 4px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+  z-index: 5;
+}
+.dropdown.open {
+  display: block;
+}
+.dropdown ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.dropdown ul li a {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 0.75rem;
+  color: #a47d57;
+  text-decoration: none;
+}
+.dropdown ul li a:hover {
+  background: #f4e9d5;
+}
+
+@media (min-width: 768px) {
+  .frame-container {
+    max-width: 1000px;
+    margin: auto;
+  }
+  .form-auth {
+    position: relative;
+    top: -1.875rem;
+    left: 5.5rem;
+  }
+  .logo {
+    width: 6.5rem;
+  }
+}/*# sourceMappingURL=style.css.map */
