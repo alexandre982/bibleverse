@@ -1,4 +1,8 @@
-<div class="verse">
-  <p><?= $verseText ?></p>
-  <p class="ref"><?= $verseRef ?></p>
+<div class="content-container verse">
+  <div class="verse-text">
+    <?= nl2br(htmlspecialchars($verseText)) ?>
+  </div>
+  <div class="verse-ref">
+    <?= htmlspecialchars($verseRef) ?>
+  </div>
 </div>

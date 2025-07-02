@@ -2,12 +2,12 @@
   "name": "alexandremoraisdesousa/bible-verse",
   "autoload": {
     "psr-4": {
-      "Core\\": "core/",
-      "App\\Controllers\\": "app/Controllers/",
-      "App\\Models\\": "app/Models/"
+      "App\\": "app/",
+      "Core\\": "core/"
     }
   },
   "require": {
+    "ext-curl": "*",
     "ext-pdo": "*"
   }
 }

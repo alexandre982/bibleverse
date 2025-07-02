@@ -51,7 +51,7 @@
   margin-top: 1.5rem;
   font-size: 0.95rem;
   font-style: italic;
-  color: rgb(91.4516129032, 68.2258064516, 43.5483870968);
+  color: #5b442c;
 }
 .admin-dashboard ul {
   list-style: none;
@@ -69,7 +69,7 @@
 .admin-dashboard ul li em {
   font-style: italic;
   font-size: 0.85rem;
-  color: rgb(56.9032258065, 42.4516129032, 27.0967741935);
+  color: #392a1b;
 }
 .admin-dashboard ul li a {
   color: #7e5e3c;
@@ -79,7 +79,7 @@
   font-weight: 600;
 }
 .admin-dashboard ul li a:hover {
-  color: rgb(74.1774193548, 55.3387096774, 35.3225806452);
+  color: #4a3723;
 }
 .admin-dashboard ul li .actions {
   margin-top: 0.5rem;
@@ -91,7 +91,7 @@
   color: #7e5e3c;
 }
 .admin-dashboard ul li .actions a:hover {
-  color: rgb(39.6290322581, 29.564516129, 18.8709677419);
+  color: #281e13;
 }
 
 * {
@@ -158,7 +158,8 @@ body {
   left: 20%;
   width: calc(80% - 2.5rem + 2.5rem);
   height: calc(100% - 1.25rem);
-  object-fit: contain;
+  -o-object-fit: contain;
+     object-fit: contain;
   z-index: 2;
   pointer-events: none;
 }
@@ -274,7 +275,7 @@ body {
 }
 .favorites-item .fav-actions a.fav-delete:hover,
 .publication-box .fav-actions a.fav-delete:hover {
-  color: rgb(74.1774193548, 55.3387096774, 35.3225806452);
+  color: #4a3723;
   text-decoration: underline;
 }
 
@@ -312,10 +313,14 @@ body {
   border-radius: 0.5rem;
   color: #7e5e3c;
 }
+.form-auth input::-moz-placeholder, .form-auth textarea::-moz-placeholder, .form-auth select::-moz-placeholder {
+  color: #af8557;
+  font-style: italic;
+}
 .form-auth input::placeholder,
 .form-auth textarea::placeholder,
 .form-auth select::placeholder {
-  color: rgb(175.1612903226, 132.5806451613, 87.3387096774);
+  color: #af8557;
   font-style: italic;
 }
 .form-auth input:focus,
@@ -335,7 +340,7 @@ body {
   transition: background-color 0.3s ease;
 }
 .form-auth button:hover {
-  background-color: rgb(91.4516129032, 68.2258064516, 43.5483870968);
+  background-color: #5b442c;
 }
 
 /* ===== FLASH MESSAGE ===== */
@@ -351,7 +356,9 @@ body {
   background: transparent;
   z-index: 20;
   pointer-events: none;
-  user-select: none;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+          user-select: none;
 }
 
 /* ===== MENU ===== */
@@ -410,7 +417,7 @@ body {
 }
 .icons i:hover,
 .icons button:hover {
-  color: rgb(74.1774193548, 55.3387096774, 35.3225806452);
+  color: #4a3723;
 }
 
 /* ===== RESPONSIVE ===== */
@@ -443,6 +450,4 @@ body {
     height: 250px;
     margin-top: 1rem;
   }
-}
-
-/*# sourceMappingURL=style.css.map */
+}/*# sourceMappingURL=style.css.map */

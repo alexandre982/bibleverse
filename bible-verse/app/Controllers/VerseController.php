@@ -1,19 +1,26 @@
 <?php
+
 namespace App\Controllers;
 
-use App\Models\Verse;
+use App\Services\BibleApi;
 
-class VerseController extends AbstractController
+class VerseController
 {
+    private BibleApi $bibleApi;
+
+    public function __construct()
+    {
+        $this->bibleApi = new BibleApi('dbb510c4a740396e73c4340d063dd91f');
+    }
+
     public function show(): void
     {
-        $verse = Verse::getRandom();
+        $verseData = $this->bibleApi->getVerseOfTheDayByWeek();
+        $verseText = $verseData['content'] ?? 'Aucun verset trouvé.';
+        $verseRef = $verseData['reference'] ?? '';
+        $pageTitle = "Verset du jour";
 
-        $this->render('verses/show.php', [
-            'pageTitle' => 'Verset du jour',
-            'verseText' => $verse->text,
-            'verseRef' => $verse->book_name . ' ' . $verse->chapter . ':' . $verse->verse_number,
-            'verseId' => $verse->id,
-        ]);
+        $view = __DIR__ . '/../Views/verses/show.php';
+        require __DIR__ . '/../Views/layout.php';
     }
 }

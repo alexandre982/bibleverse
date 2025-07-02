@@ -1,43 +1,82 @@
 <?php
 namespace Core;
 
+use App\Controllers\AuthController;
+use App\Controllers\VerseController;
+use App\Controllers\PraiseTestimonyController;
+use App\Controllers\FavorisController;
+use App\Controllers\AdminDashboardController;
+
 class Router
 {
     public static function parse(string $route): void
     {
         switch ($route) {
             case 'inscription':
-                (new \App\Controllers\AuthController())->register();
+                (new AuthController())->register();
                 break;
 
             case 'connexion':
-                (new \App\Controllers\AuthController())->login();
+                (new AuthController())->login();
                 break;
 
             case 'verset-du-jour':
-                (new \App\Controllers\VerseController())->show();
+                (new VerseController())->show();
                 break;
 
             case 'loue-temoigne':
-                (new \App\Controllers\AuthController())->loueTemoigne();
+                (new PraiseTestimonyController())->showForm();
+                break;
+
+            case 'envoyer-loue-temoigne':
+                (new PraiseTestimonyController())->submit();
+                break;
+
+            case 'fil-actualite':
+                (new PraiseTestimonyController())->showFeed();
                 break;
 
             case 'favoris':
-                (new \App\Controllers\FavorisController())->liste();
+                (new FavorisController())->liste();
                 break;
 
             case 'ajouter-favori':
-                (new \App\Controllers\FavorisController())->ajouter();
+                (new FavorisController())->ajouter();
+                break;
+
+            case 'supprimer-favori':
+                (new FavorisController())->supprimer();
+                break;
+
+            case 'modifier-favori':
+                (new FavorisController())->modifier();
+                break;
+
+            case 'admin':
+            case 'dashboard':
+                (new AdminDashboardController())->index();
+                break;
+
+            case 'valider-publication':
+                (new AdminDashboardController())->validatePublication();
+                break;
+
+            case 'supprimer-publication':
+                (new AdminDashboardController())->deletePublication();
+                break;
+
+            case 'modifier-publication':
+                (new AdminDashboardController())->updatePublication();
                 break;
 
             case 'deconnexion':
-                session_start();
+                if (session_status() === PHP_SESSION_NONE) session_start();
                 session_destroy();
                 header('Location: ?route=connexion');
                 exit;
 
             default:
-                (new \App\Controllers\VerseController())->show();
+                (new VerseController())->show();
                 break;
         }
     }

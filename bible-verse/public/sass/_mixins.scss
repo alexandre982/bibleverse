@@ -1,9 +1,21 @@
-@mixin rose-filter {
-  filter: $rose-filter;
-}
-// Par exemple :
-@mixin center-flex {
-  display: flex;
-  align-items: center;
-  justify-content: center;
+@mixin form-control-style {
+  width: 100%;
+  padding: 0.75rem;
+  font-size: 1rem;
+  background: transparent;
+  border: $form-border;
+  border-radius: $form-radius;
+  color: $brand-brown;
+  font-family: inherit;
+
+  &::placeholder {
+    color: $brand-brown;
+    opacity: 0.8;
+  }
+
+  &:focus {
+    outline: none;
+    border-color: darken($brand-brown, 10%);
+    background-color: rgba(255, 255, 255, 0.1);
+  }
 }

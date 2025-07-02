@@ -2,16 +2,19 @@
 namespace App\Models;
 
 use Core\Database;
+use PDO;
 
 abstract class AbstractModel
 {
-    protected static function db()
+    protected PDO $db;
+
+    public function __construct()
     {
-        return Database::getConnection();
+        $this->db = Database::getInstance();
     }
 
-    public static function getDb()
+    protected function getDb(): PDO
     {
-        return static::db();
+        return $this->db;
     }
 }

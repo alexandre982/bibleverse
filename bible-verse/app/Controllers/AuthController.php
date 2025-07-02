@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Controllers;
 
 use App\Models\User;
@@ -7,86 +8,114 @@ class AuthController extends AbstractController
 {
     public function register(): void
     {
-        if (session_status() === PHP_SESSION_NONE) {
-            session_start();
-        }
+        if (session_status() === PHP_SESSION_NONE) session_start();
 
         $errors = [];
+        $old = [];
+
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $name = trim($_POST['name'] ?? '');
             $email = trim($_POST['email'] ?? '');
             $password = $_POST['password'] ?? '';
+            $confirmPassword = $_POST['confirm_password'] ?? '';
 
-            if (!$name || !$email || !$password) {
-                $errors[] = 'Tous les champs sont obligatoires.';
+            $old = compact('name', 'email');
+
+            if (empty($name)) {
+                $errors[] = 'Le nom est obligatoire.';
             }
 
             if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
                 $errors[] = 'Email invalide.';
             }
 
-            if (User::findByEmail($email)) {
-                $errors[] = 'Email déjà utilisé.';
+            if (strlen($password) < 6) {
+                $errors[] = 'Le mot de passe doit contenir au moins 6 caractères.';
+            }
+
+            if ($password !== $confirmPassword) {
+                $errors[] = 'Les mots de passe ne correspondent pas.';
             }
 
             if (empty($errors)) {
-                $hashed = password_hash($password, PASSWORD_BCRYPT);
-                User::create($name, $email, $hashed);
-                $this->redirect('connexion');
-                return;
+                $userModel = new User();
+                $existingUser = $userModel->findByEmail($email);
+
+                if ($existingUser) {
+                    $errors[] = 'Cet email est déjà utilisé.';
+                } else {
+                    $userId = $userModel->create([
+                        'name' => $name,
+                        'email' => $email,
+                        'password' => password_hash($password, PASSWORD_DEFAULT),
+                    ]);
+
+                    $_SESSION['user'] = [
+                        'id' => $userId,
+                        'name' => $name,
+                        'email' => $email,
+                        'role' => 'user',
+                    ];
+
+                    $_SESSION['flash'] = "Inscription réussie. Bienvenue !";
+                    $this->redirect('verset-du-jour');
+                    return;
+                }
             }
         }
 
         $this->render('auth/register.php', [
             'pageTitle' => 'Inscription',
-            'errors' => $errors
+            'errors' => $errors,
+            'old' => $old
         ]);
     }
 
     public function login(): void
     {
-        if (session_status() === PHP_SESSION_NONE) {
-            session_start();
-        }
+        if (session_status() === PHP_SESSION_NONE) session_start();
 
         $errors = [];
+        $old = [];
+
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $email = trim($_POST['email'] ?? '');
             $password = $_POST['password'] ?? '';
-            $user = User::findByEmail($email);
+            $old = compact('email');
 
-            if (!$user || !password_verify($password, $user->password)) {
-                $errors[] = 'Identifiants incorrects.';
+            if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+                $errors[] = 'Email invalide.';
+            }
+
+            if (empty($password)) {
+                $errors[] = 'Le mot de passe est requis.';
             }
 
             if (empty($errors)) {
-                $_SESSION['user'] = ['id' => $user->id, 'name' => $user->name];
-                $this->redirect('verset-du-jour');
-                return;
+                $userModel = new User();
+                $user = $userModel->findByEmail($email);
+
+                if (!$user || !password_verify($password, $user['password'])) {
+                    $errors[] = 'Identifiants incorrects.';
+                } else {
+                    $_SESSION['user'] = [
+                        'id' => $user['id'],
+                        'name' => $user['name'],
+                        'email' => $user['email'],
+                        'role' => $user['role'],
+                    ];
+
+                    $_SESSION['flash'] = "Connexion réussie. Bienvenue !";
+                    $this->redirect('verset-du-jour');
+                    return;
+                }
             }
         }
 
         $this->render('auth/login.php', [
             'pageTitle' => 'Connexion',
-            'errors' => $errors
-        ]);
-    }
-
-    public function loueTemoigne(): void
-    {
-        if (session_status() === PHP_SESSION_NONE) {
-            session_start();
-        }
-
-        if (!isset($_SESSION['user'])) {
-            $this->redirect('connexion');
-            return;
-        }
-
-        $this->render('verses/show.php', [
-            'pageTitle' => 'Loue & Témoigne',
-            'verseText' => 'Espace pour publier un témoignage ou une louange.',
-            'verseRef' => ''
+            'errors' => $errors,
+            'old' => $old
         ]);
     }
 }

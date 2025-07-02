@@ -1,28 +1,44 @@
 <?php
+
 namespace App\Models;
 
-use PDO;
 use Core\Database;
+use PDO;
 
-class User extends AbstractModel
+class User
 {
-    public int $id;
-    public string $name;
-    public string $email;
-    public string $password;
-    public string $role;
+    protected $db;
 
-    public static function findByEmail(string $email): ?self
+    public function __construct()
     {
-        $stmt = self::db()->prepare("SELECT * FROM users WHERE email = ?");
-        $stmt->execute([$email]);
-        $stmt->setFetchMode(PDO::FETCH_CLASS, self::class);
-        return $stmt->fetch() ?: null;
+        $this->db = Database::getInstance();
     }
 
-    public static function create(string $name, string $email, string $hashedPassword): void
+    public function findByEmail(string $email): ?array
     {
-        $stmt = self::db()->prepare("INSERT INTO users (name, email, password) VALUES (?, ?, ?)");
-        $stmt->execute([$name, $email, $hashedPassword]);
+        $stmt = $this->db->prepare("SELECT * FROM users WHERE email = :email");
+        $stmt->execute(['email' => $email]);
+        return $stmt->fetch(PDO::FETCH_ASSOC) ?: null;
+    }
+
+    public function create(array $data): int
+    {
+        $stmt = $this->db->prepare("
+            INSERT INTO users (name, email, password, registration_date, role)
+            VALUES (:name, :email, :password, NOW(), 'user')
+        ");
+        $stmt->execute([
+            'name' => $data['name'],
+            'email' => $data['email'],
+            'password' => $data['password'], // doit être hashé
+        ]);
+
+        return (int)$this->db->lastInsertId();
+    }
+
+    public function countAll(): int
+    {
+        $stmt = $this->db->query("SELECT COUNT(*) FROM users");
+        return (int)$stmt->fetchColumn();
     }
 }
