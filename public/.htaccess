@@ -1,6 +1,6 @@
 <IfModule mod_rewrite.c>
   RewriteEngine On
-  RewriteBase /bible-verse/public/
+  RewriteBase /public/
 
   # Ne pas réécrire les vrais fichiers/dossiers
   RewriteCond %{REQUEST_FILENAME} -f [OR]
