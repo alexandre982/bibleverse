@@ -1,79 +1,88 @@
 <?php
-
 namespace App\Controllers;
 
 use App\Models\Publication;
 
 class PraiseTestimonyController extends AbstractController
 {
-    public function showForm(): void
+    private Publication $publicationModel;
+
+    public function __construct()
     {
         if (session_status() === PHP_SESSION_NONE) session_start();
+        $this->publicationModel = new Publication();
+    }
+
+    public function showForm(): void
+    {
+        if (!isset($_SESSION['user']['id'])) {
+            $this->redirect('connexion');
+            return;
+        }
 
         $this->render('praise-testimony/post.php', [
-            'pageTitle' => 'Loue/Témoigne',
-            'errors' => [],
-            'old' => []
+            'pageTitle' => 'Loue & Témoigne',
+            'errors'    => [],
+            'old'       => []
         ]);
     }
 
     public function submit(): void
     {
-        if (session_status() === PHP_SESSION_NONE) session_start();
+        if (!isset($_SESSION['user']['id'])) {
+            $this->redirect('connexion');
+            return;
+        }
 
-        $errors = [];
-        $type = $_POST['type'] ?? '';
+        $errors  = [];
+        $type    = $_POST['type']    ?? '';
         $content = $_POST['content'] ?? '';
-        $color = $_POST['color'] ?? '';
+        $color   = $_POST['color']   ?? '';
 
-        $validTypes = ['praise', 'testimony'];
-        $validColors = ['red', 'green', 'blue', 'violet', 'indigo', 'darkbrown'];
-
-        if (!in_array($type, $validTypes)) {
+        if (!in_array($type, ['praise', 'testimony'])) {
             $errors[] = 'Type invalide.';
         }
-
-        if (empty(trim($content))) {
+        if (trim($content) === '') {
             $errors[] = 'Le contenu est obligatoire.';
         }
-
-        if (!in_array($color, $validColors)) {
+        if (!in_array($color, ['red', 'green', 'blue', 'violet', 'indigo', 'darkbrown'])) {
             $errors[] = 'Couleur invalide.';
         }
 
-        if (empty($errors) && isset($_SESSION['user']['id'])) {
-            $publication = new Publication();
-
-            $success = $publication->create([
+        if (empty($errors)) {
+            $success = $this->publicationModel->create([
                 'user_id' => $_SESSION['user']['id'],
-                'type' => $type,
-                'content' => $content,
-                'color' => $color
+                'type'    => $type,
+                'content' => $content
             ]);
 
             if ($success) {
-                $_SESSION['flash'] = "Publication envoyée pour validation.";
-                $this->redirect('loue-temoigne');
+                $_SESSION['flash'] = 'Publication envoyée pour validation.';
+                $_SESSION['highlightColor'] = $color;
+                $this->redirect('fil-actualite');
+                return;
             } else {
                 $errors[] = "Erreur lors de l'enregistrement.";
             }
         }
 
         $this->render('praise-testimony/post.php', [
-            'pageTitle' => 'Loue/Témoigne',
-            'errors' => $errors,
-            'old' => $_POST
+            'pageTitle' => 'Loue & Témoigne',
+            'errors'    => $errors,
+            'old'       => $_POST
         ]);
     }
 
     public function showFeed(): void
     {
-        $publicationModel = new Publication();
-        $publications = $publicationModel->getValidated();
+        $publications = $this->publicationModel->getValidated();
+        $highlightColor = $_SESSION['highlightColor'] ?? null;
+        unset($_SESSION['highlightColor']);
 
         $this->render('praise-testimony/feed.php', [
-            'pageTitle' => 'Fil d’actualité',
-            'publications' => $publications
+            'pageTitle'      => 'Fil d’actualité',
+            'publications'   => $publications,
+            'highlightColor' => $highlightColor
         ]);
     }
 }

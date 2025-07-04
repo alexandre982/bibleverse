@@ -1,8 +1,8 @@
 <div class="content-container verse">
   <div class="verse-text">
-    <?= nl2br(htmlspecialchars($verseText)) ?>
+    <?= isset($verseText) ? nl2br(htmlspecialchars($verseText)) : '' ?>
   </div>
   <div class="verse-ref">
-    <?= htmlspecialchars($verseRef) ?>
+    <?= isset($verseRef) ? htmlspecialchars($verseRef) : '' ?>
   </div>
 </div>

@@ -1,62 +1,53 @@
 <?php
 namespace App\Models;
-
-use PDO;
+require_once __DIR__.'/AbstractModel.php';
 
 class Favorites extends AbstractModel
 {
-    protected string $table = 'favorites';
-
     public function add(int $userId, int $verseId): bool
     {
-        $stmt = $this->db->prepare("INSERT INTO {$this->table} (user_id, verse_id) VALUES (:user_id, :verse_id)");
-        return $stmt->execute([
-            'user_id' => $userId,
-            'verse_id' => $verseId
-        ]);
+        $sql = "INSERT INTO favorites (user_id, verse_id) VALUES (:user_id,:verse_id)";
+        $stmt= $this->getDb()->prepare($sql);
+        return $stmt->execute(['user_id'=>$userId,'verse_id'=>$verseId]);
+    }
+
+    public function exists(int $userId, int $verseId): bool
+    {
+        $sql = "SELECT COUNT(*) AS cnt 
+                FROM favorites 
+                WHERE user_id=:u AND verse_id=:v";
+        $stmt = $this->getDb()->prepare($sql);
+        $stmt->execute(['u'=>$userId,'v'=>$verseId]);
+        return (bool)$stmt->fetch()['cnt'];
     }
 
     public function getByUserId(int $userId): array
     {
-        $sql = "
-            SELECT f.id, v.book_id AS book, v.chapter, v.verse_number, v.text, u.name AS user_name
-            FROM favorites f
-            JOIN verses v ON f.verse_id = v.id
-            JOIN users u ON f.user_id = u.id
-            WHERE f.user_id = :user_id
-            ORDER BY f.added_at DESC
-        ";
-        $stmt = $this->db->prepare($sql);
-        $stmt->execute(['user_id' => $userId]);
-        return $stmt->fetchAll(PDO::FETCH_OBJ);
+        $sql= "SELECT f.id AS favorite_id,
+                      b.name    AS book_name,
+                      v.chapter, v.verse_number, v.text
+               FROM favorites f
+               JOIN verses v ON f.verse_id=v.id
+               JOIN books b  ON v.book_id=b.id
+               WHERE f.user_id=:user_id
+               ORDER BY f.added_at DESC";
+        $stmt = $this->getDb()->prepare($sql);
+        $stmt->execute(['user_id'=>$userId]);
+        return $stmt->fetchAll();
     }
 
-    public function remove(int $userId, int $verseId): bool
+    public function remove(int $favoriteId): bool
     {
-        $stmt = $this->db->prepare("DELETE FROM {$this->table} WHERE user_id = :user_id AND verse_id = :verse_id");
-        return $stmt->execute([
-            'user_id' => $userId,
-            'verse_id' => $verseId
-        ]);
-    }
-
-    public function removeById(int $id): bool
-    {
-        $stmt = $this->db->prepare("DELETE FROM {$this->table} WHERE id = :id");
-        return $stmt->execute(['id' => $id]);
-    }
-
-    public function update(int $id, int $verseId): bool
-    {
-        $stmt = $this->db->prepare("UPDATE {$this->table} SET verse_id = :verse_id WHERE id = :id");
-        return $stmt->execute([
-            'id' => $id,
-            'verse_id' => $verseId
-        ]);
+        $sql="DELETE FROM favorites WHERE id=:id";
+        $stmt=$this->getDb()->prepare($sql);
+        return $stmt->execute(['id'=>$favoriteId]);
     }
 
     public function countAll(): int
     {
-        return (int) $this->db->query("SELECT COUNT(*) FROM {$this->table}")->fetchColumn();
+        $row = $this->getDb()
+                    ->query("SELECT COUNT(*) AS total FROM favorites")
+                    ->fetch();
+        return (int)$row['total'];
     }
 }

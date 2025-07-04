@@ -48,10 +48,6 @@ class Router
                 (new FavorisController())->supprimer();
                 break;
 
-            case 'modifier-favori':
-                (new FavorisController())->modifier();
-                break;
-
             case 'admin':
             case 'dashboard':
                 (new AdminDashboardController())->index();

@@ -52,4 +52,18 @@ document.addEventListener("DOMContentLoaded", function () {
       alert("La fonction de partage n’est pas supportée par votre navigateur.");
     });
   }
+
+  // FORMULAIRE DE MODIFICATION DANS LE DASHBOARD
+  const editLinks = document.querySelectorAll(".edit-toggle");
+
+  editLinks.forEach((link) => {
+    link.addEventListener("click", function (e) {
+      e.preventDefault();
+      const id = this.dataset.id;
+      const form = document.getElementById("edit-form-" + id);
+      if (form) {
+        form.style.display = form.style.display === "none" ? "block" : "none";
+      }
+    });
+  });
 });

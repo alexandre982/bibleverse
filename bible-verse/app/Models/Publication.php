@@ -2,20 +2,35 @@
 namespace App\Models;
 
 use PDO;
+use Core\Database;
 
-class Publication extends AbstractModel
+class Publication
 {
+    protected PDO $db;
     protected string $table = 'publications';
+
+    public function __construct()
+    {
+        $this->db = Database::getConnection();
+    }
 
     public function create(array $data): bool
     {
-        $stmt = $this->db->prepare("INSERT INTO {$this->table} (user_id, type, content, color) VALUES (:user_id, :type, :content, :color)");
-        return $stmt->execute([
-            'user_id' => $data['user_id'],
-            'type' => $data['type'],
-            'content' => $data['content'],
-            'color' => $data['color']
-        ]);
+        try {
+            $stmt = $this->db->prepare("
+                INSERT INTO {$this->table} (user_id, type, content, is_validated)
+                VALUES (:user_id, :type, :content, 0)
+            ");
+            return $stmt->execute([
+                'user_id' => $data['user_id'],
+                'type' => $data['type'],
+                'content' => $data['content']
+            ]);
+        } catch (\PDOException $e) {
+            // Tu peux activer l'affichage de l'erreur pour débogage :
+            error_log('Erreur insertion publication : ' . $e->getMessage());
+            return false;
+        }
     }
 
     public function getValidated(): array
@@ -33,13 +48,14 @@ class Publication extends AbstractModel
 
     public function getPending(): array
     {
-        $stmt = $this->db->query("
+        $stmt = $this->db->prepare("
             SELECT p.*, u.name AS user_name
             FROM {$this->table} p
             JOIN users u ON p.user_id = u.id
-            WHERE is_validated = 0
-            ORDER BY created_at DESC
+            WHERE p.is_validated = 0
+            ORDER BY p.created_at DESC
         ");
+        $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_OBJ);
     }
 
@@ -57,11 +73,10 @@ class Publication extends AbstractModel
 
     public function update(int $id, array $data): bool
     {
-        $stmt = $this->db->prepare("UPDATE {$this->table} SET content = :content, color = :color WHERE id = :id");
+        $stmt = $this->db->prepare("UPDATE {$this->table} SET content = :content WHERE id = :id");
         return $stmt->execute([
             'id' => $id,
-            'content' => $data['content'],
-            'color' => $data['color']
+            'content' => $data['content']
         ]);
     }
 

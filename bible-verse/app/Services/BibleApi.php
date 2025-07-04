@@ -60,6 +60,7 @@ class BibleApi
         }
 
         return [
+            'id' => $response['data']['id'] ?? null,           // <-- Ajout de l'id ici
             'reference' => $response['data']['reference'] ?? null,
             'content' => strip_tags($response['data']['content'] ?? '')
         ];

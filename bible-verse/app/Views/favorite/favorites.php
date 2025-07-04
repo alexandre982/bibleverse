@@ -1,19 +1,19 @@
-<?php if (session_status() === PHP_SESSION_NONE) session_start(); ?>
-<div class="favorites-wrapper">
-  <?php if (!empty($favorites)): ?>
-    <div class="favorites-scrollable scrollbar-visible">
-      <?php foreach ($favorites as $fav): ?>
-        <div class="favorites-item">
-          <strong><?= htmlspecialchars($fav->book_name ?? $fav->book) ?> <?= $fav->chapter ?>:<?= $fav->verse_number ?></strong>
-          <p><?= htmlspecialchars($fav->text) ?></p>
-          <em>Utilisateur: <?= htmlspecialchars($fav->user_name) ?></em>
-          <div class="fav-actions">
-            <a class="fav-delete" href="?route=supprimer-favori&id=<?= $fav->id ?>">Supprimer</a>
-          </div>
-        </div>
-      <?php endforeach; ?>
-    </div>
+<section class="favorites-wrapper">
+  <h2>Mes Favoris</h2>
+  <?php if(empty($favorites)): ?>
+    <p>Aucun favori pour le moment.</p>
   <?php else: ?>
-    <p class="no-fav">Aucun verset favori pour le moment.</p>
+    <ul class="favorites-list">
+      <?php foreach($favorites as $fav): ?>
+        <li class="favorites-item">
+          <strong><?= htmlspecialchars($fav['book_name']) ?> <?= $fav['chapter'] ?>:<?= $fav['verse_number'] ?></strong>
+          <p><?= nl2br(htmlspecialchars($fav['text'])) ?></p>
+          <form method="POST" action="?route=supprimer-favori" class="fav-actions">
+            <input type="hidden" name="favorite_id" value="<?= (int)$fav['favorite_id'] ?>">
+            <button type="submit" aria-label="Supprimer"><i class="fa-solid fa-trash"></i></button>
+          </form>
+        </li>
+      <?php endforeach; ?>
+    </ul>
   <?php endif; ?>
-</div>
+</section>

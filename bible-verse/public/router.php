@@ -13,71 +13,38 @@ class Router
     {
         switch ($route) {
             case 'inscription':
-                (new AuthController())->register();
-                break;
-
+                (new AuthController())->register(); break;
             case 'connexion':
-                (new AuthController())->login();
-                break;
-
+                (new AuthController())->login(); break;
             case 'verset-du-jour':
-                (new VerseController())->show();
-                break;
-
+                (new VerseController())->show(); break;
             case 'loue-temoigne':
-                (new PraiseTestimonyController())->showForm();
-                break;
-
+                (new PraiseTestimonyController())->showForm(); break;
             case 'envoyer-loue-temoigne':
-                (new PraiseTestimonyController())->submit();
-                break;
-
+                (new PraiseTestimonyController())->submit(); break;
             case 'fil-actualite':
-                (new PraiseTestimonyController())->showFeed();
-                break;
-
+                (new PraiseTestimonyController())->showFeed(); break;
             case 'favoris':
-                (new FavorisController())->liste();
-                break;
-
+                (new FavorisController())->liste(); break;
             case 'ajouter-favori':
-                (new FavorisController())->ajouter();
-                break;
-
+                (new FavorisController())->ajouter(); break;
             case 'supprimer-favori':
-                (new FavorisController())->supprimer();
-                break;
-
-            case 'modifier-favori':
-                (new FavorisController())->modifier();
-                break;
-
+                (new FavorisController())->supprimer(); break;
             case 'admin':
             case 'dashboard':
-                (new AdminDashboardController())->index();
-                break;
-
+                (new AdminDashboardController())->index(); break;
             case 'valider-publication':
-                (new AdminDashboardController())->validatePublication();
-                break;
-
+                (new AdminDashboardController())->validatePublication(); break;
             case 'supprimer-publication':
-                (new AdminDashboardController())->deletePublication();
-                break;
-
+                (new AdminDashboardController())->deletePublication(); break;
             case 'modifier-publication':
-                (new AdminDashboardController())->updatePublication();
-                break;
-
+                (new AdminDashboardController())->updatePublication(); break;
             case 'deconnexion':
-                if (session_status() === PHP_SESSION_NONE) session_start();
+                if (session_status()===PHP_SESSION_NONE) session_start();
                 session_destroy();
-                header('Location: ?route=connexion');
-                exit;
-
+                header('Location:?route=connexion'); exit;
             default:
-                (new VerseController())->show();
-                break;
+                (new VerseController())->show(); break;
         }
     }
 }

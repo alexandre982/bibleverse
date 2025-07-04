@@ -29,7 +29,20 @@ class ComposerStaticInitc9335ded7e28cf94b8de73329c7b44ca
     );
 
     public static $classMap = array (
+        'App\\Controllers\\AbstractController' => __DIR__ . '/../..' . '/app/Controllers/AbstractController.php',
+        'App\\Controllers\\AdminDashboardController' => __DIR__ . '/../..' . '/app/Controllers/AdminDashboardController.php',
+        'App\\Controllers\\AuthController' => __DIR__ . '/../..' . '/app/Controllers/AuthController.php',
+        'App\\Controllers\\FavorisController' => __DIR__ . '/../..' . '/app/Controllers/FavorisController.php',
+        'App\\Controllers\\PraiseTestimonyController' => __DIR__ . '/../..' . '/app/Controllers/PraiseTestimonyController.php',
+        'App\\Controllers\\VerseController' => __DIR__ . '/../..' . '/app/Controllers/VerseController.php',
+        'App\\Models\\AbstractModel' => __DIR__ . '/../..' . '/app/Models/AbstractModel.php',
+        'App\\Models\\Favorites' => __DIR__ . '/../..' . '/app/Models/Favorites.php',
+        'App\\Models\\Publication' => __DIR__ . '/../..' . '/app/Models/Publication.php',
+        'App\\Models\\User' => __DIR__ . '/../..' . '/app/Models/User.php',
+        'App\\Services\\BibleApi' => __DIR__ . '/../..' . '/app/Services/BibleApi.php',
         'Composer\\InstalledVersions' => __DIR__ . '/..' . '/composer/InstalledVersions.php',
+        'Core\\Database' => __DIR__ . '/../..' . '/core/Database.php',
+        'Core\\Router' => __DIR__ . '/../..' . '/core/Router.php',
     );
 
     public static function getInitializer(ClassLoader $loader)
